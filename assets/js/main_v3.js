@@ -1,4 +1,4 @@
-// Archivo JavaScript combinado con envío AJAX y depuración mejorada + Google Analytics
+// Archivo JavaScript combinado con envío AJAX y depuración mejorada
 
 (function() {
     'use strict';
@@ -31,7 +31,6 @@
         hidePreloader();
         initWhatsAppButton();
         initAccessibility();
-        initGoogleAnalytics(); // Nueva función para Google Analytics
 
         // Funciones adicionales de mainbootstrap.js
         setTimeout(function() {
@@ -41,129 +40,6 @@
 
         console.log('✅ Todos los componentes inicializados');
     });
-
-    // Google Analytics Initialization
-    function initGoogleAnalytics() {
-        // Solo inicializar si gtag está disponible (cargado desde el HTML)
-        if (typeof gtag === 'function') {
-            console.log('📊 Configurando eventos de Google Analytics...');
-            setupAnalyticsEvents();
-        } else {
-            console.warn('⚠️ Google Analytics no está disponible. Asegúrate de incluir gtag en el HTML.');
-        }
-    }
-
-    // Configurar eventos de Google Analytics
-    function setupAnalyticsEvents() {
-        // Rastrear clics en WhatsApp
-        document.querySelectorAll('a[href*="wa.me"]').forEach(function(link) {
-            link.addEventListener('click', function() {
-                const linkText = this.textContent || this.getAttribute('aria-label') || 'whatsapp_link';
-                gtag('event', 'contact', {
-                    'event_category': 'engagement',
-                    'event_label': 'whatsapp_click',
-                    'custom_parameters': {
-                        'link_text': linkText,
-                        'phone_number': this.href.match(/\d+/)?.[0] || 'unknown'
-                    }
-                });
-                console.log('📱 WhatsApp click tracked:', linkText);
-            });
-        });
-
-        // Rastrear clics en email
-        document.querySelectorAll('a[href^="mailto:"]').forEach(function(link) {
-            link.addEventListener('click', function() {
-                gtag('event', 'contact', {
-                    'event_category': 'engagement',
-                    'event_label': 'email_click',
-                    'custom_parameters': {
-                        'email': this.href.replace('mailto:', '')
-                    }
-                });
-                console.log('📧 Email click tracked:', this.href);
-            });
-        });
-
-        // Rastrear clics en teléfonos
-        document.querySelectorAll('a[href^="tel:"]').forEach(function(link) {
-            link.addEventListener('click', function() {
-                gtag('event', 'contact', {
-                    'event_category': 'engagement',
-                    'event_label': 'phone_click',
-                    'custom_parameters': {
-                        'phone_number': this.href.replace('tel:', '')
-                    }
-                });
-                console.log('📞 Phone click tracked:', this.href);
-            });
-        });
-
-        // Rastrear clics en botones de "Más Información"
-        document.querySelectorAll('.btn[href="#footer"]').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                const serviceCard = this.closest('.card');
-                const serviceName = serviceCard ? serviceCard.querySelector('h3')?.textContent || 'unknown_service' : 'unknown_service';
-                
-                gtag('event', 'cta_click', {
-                    'event_category': 'engagement',
-                    'event_label': 'more_info_button',
-                    'custom_parameters': {
-                        'service_name': serviceName
-                    }
-                });
-                console.log('🔗 CTA click tracked:', serviceName);
-            });
-        });
-
-        // Rastrear scroll profundo (usuario lee el 75% de la página)
-        let scrollTracked = false;
-        window.addEventListener('scroll', function() {
-            if (!scrollTracked) {
-                const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-                if (scrollPercent > 75) {
-                    gtag('event', 'scroll', {
-                        'event_category': 'engagement',
-                        'event_label': 'deep_scroll',
-                        'custom_parameters': {
-                            'scroll_percentage': Math.round(scrollPercent)
-                        }
-                    });
-                    scrollTracked = true;
-                    console.log('📜 Deep scroll tracked: 75%+');
-                }
-            }
-        });
-
-        // Rastrear tiempo en página (después de 30 segundos)
-        setTimeout(function() {
-            gtag('event', 'timing_complete', {
-                'event_category': 'engagement',
-                'event_label': 'time_on_page_30s'
-            });
-            console.log('⏱️ Time on page tracked: 30 seconds');
-        }, 30000);
-
-        // Rastrear interacción con redes sociales
-        document.querySelectorAll('a[href*="instagram"], a[href*="linkedin"], a[href*="facebook"], a[href*="twitter"]').forEach(function(link) {
-            link.addEventListener('click', function() {
-                let platform = 'unknown';
-                if (this.href.includes('instagram')) platform = 'instagram';
-                else if (this.href.includes('linkedin')) platform = 'linkedin';
-                else if (this.href.includes('facebook')) platform = 'facebook';
-                else if (this.href.includes('twitter')) platform = 'twitter';
-
-                gtag('event', 'social_click', {
-                    'event_category': 'engagement',
-                    'event_label': platform,
-                    'custom_parameters': {
-                        'social_network': platform
-                    }
-                });
-                console.log('📱 Social media click tracked:', platform);
-            });
-        });
-    }
 
     // Navbar functionality (de main.js, con ajustes)
     function initNavbar() {
@@ -189,19 +65,6 @@
                 
                 if (bsCollapse && navbarCollapse.classList.contains('show')) {
                     bsCollapse.hide();
-                }
-
-                // Rastrear navegación interna
-                const href = this.getAttribute('href');
-                if (href && href.startsWith('#') && typeof gtag === 'function') {
-                    gtag('event', 'page_view', {
-                        'event_category': 'navigation',
-                        'event_label': 'internal_link',
-                        'custom_parameters': {
-                            'section': href.replace('#', '')
-                        }
-                    });
-                    console.log('🔗 Internal navigation tracked:', href);
                 }
             });
         });
@@ -319,7 +182,7 @@
 
         // Validación en tiempo real
         const inputs = form.querySelectorAll('input, textarea');
-        console.log('🔍 Campos encontrados:', inputs.length);
+        console.log('📝 Campos encontrados:', inputs.length);
         
         inputs.forEach(input => {
             // Validación al perder el foco
@@ -350,15 +213,6 @@
             if (!isValid) {
                 console.log('❌ Validación falló');
                 showMessage('Por favor, corrige los errores en el formulario.', 'danger');
-                
-                // Rastrear error de validación
-                if (typeof gtag === 'function') {
-                    gtag('event', 'form_error', {
-                        'event_category': 'form',
-                        'event_label': 'validation_failed'
-                    });
-                }
-                
                 // Hacer scroll al primer campo con error
                 const firstError = form.querySelector('.is-invalid');
                 if (firstError) {
@@ -392,14 +246,6 @@
         
         const form = document.getElementById('contact-form') || document.getElementById('contactForm') || document.querySelector('form');
         const submitButton = form.querySelector('button[type="submit"]');
-        
-        // Rastrear inicio de envío
-        if (typeof gtag === 'function') {
-            gtag('event', 'form_start', {
-                'event_category': 'form',
-                'event_label': 'contact_form_submit'
-            });
-        }
         
         // Deshabilitar botón y mostrar loading
         const originalText = submitButton.innerHTML;
@@ -446,16 +292,6 @@
             
             if (data.success) {
                 console.log('✅ Mensaje enviado exitosamente');
-                
-                // Rastrear envío exitoso
-                if (typeof gtag === 'function') {
-                    gtag('event', 'form_submit', {
-                        'event_category': 'form',
-                        'event_label': 'contact_form_success',
-                        'value': 1
-                    });
-                }
-                
                 // Mostrar mensaje de éxito
                 showMessage(data.message || '¡Mensaje enviado correctamente! Te contactaremos pronto.', 'success');
                 
@@ -464,15 +300,6 @@
                 clearFormValidation();
             } else {
                 console.log('❌ Error en el envío:', data.message);
-                
-                // Rastrear error de envío
-                if (typeof gtag === 'function') {
-                    gtag('event', 'form_error', {
-                        'event_category': 'form',
-                        'event_label': 'submission_failed'
-                    });
-                }
-                
                 // Mostrar mensaje de error
                 showMessage(data.message || 'Error al enviar el mensaje. Inténtalo de nuevo.', 'danger');
             }
@@ -486,17 +313,6 @@
         .catch(error => {
             console.error('💥 Error en AJAX:', error);
             window.RavenNetDebug.lastError = error.message;
-            
-            // Rastrear error técnico
-            if (typeof gtag === 'function') {
-                gtag('event', 'form_error', {
-                    'event_category': 'form',
-                    'event_label': 'technical_error',
-                    'custom_parameters': {
-                        'error_message': error.message
-                    }
-                });
-            }
             
             // Restaurar botón
             submitButton.disabled = false;
@@ -859,14 +675,6 @@
     window.addEventListener('error', function(e) {
         console.error('Error en la aplicación:', e.error);
         window.RavenNetDebug.lastError = e.error.message;
-        
-        // Rastrear errores JavaScript
-        if (typeof gtag === 'function') {
-            gtag('event', 'exception', {
-                'description': e.error.message,
-                'fatal': false
-            });
-        }
     });
 
     // Función para manejar el resize de la ventana (de main.js)
@@ -910,7 +718,6 @@
             console.log('  Script cargado:', window.RavenNetDebug.scriptLoaded);
             console.log('  Formulario encontrado:', window.RavenNetDebug.formFound);
             console.log('  Último error:', window.RavenNetDebug.lastError);
-            console.log('  Google Analytics disponible:', typeof gtag === 'function');
             
             const form = document.getElementById('contact-form') || document.getElementById('contactForm') || document.querySelector('form');
             console.log('  Formulario actual:', form);
@@ -919,25 +726,6 @@
                 console.log('  ID del formulario:', form.id);
                 console.log('  Action del formulario:', form.action);
                 console.log('  Método del formulario:', form.method);
-            }
-        },
-
-        // Función para enviar evento personalizado de Analytics
-        trackEvent: function(eventName, category = 'engagement', label = '', value = null) {
-            if (typeof gtag === 'function') {
-                const eventData = {
-                    'event_category': category,
-                    'event_label': label
-                };
-                
-                if (value !== null) {
-                    eventData.value = value;
-                }
-                
-                gtag('event', eventName, eventData);
-                console.log('📊 Evento personalizado enviado:', eventName, eventData);
-            } else {
-                console.warn('⚠️ Google Analytics no disponible para trackear evento:', eventName);
             }
         }
     };
@@ -955,15 +743,6 @@
                 const img = new Image();
                 img.src = src;
             });
-
-            // Rastrear precarga de recursos
-            if (typeof gtag === 'function') {
-                gtag('event', 'resource_preload', {
-                    'event_category': 'performance',
-                    'event_label': 'images_preloaded',
-                    'value': importantImages.length
-                });
-            }
         });
     }
 
@@ -971,3 +750,4 @@
     console.log('🎉 RavenNet JavaScript completamente inicializado');
 
 })();
+
