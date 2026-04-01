@@ -48,6 +48,8 @@ module.exports = async function handler(req, res) {
   }
 
   // Configurar transporte SMTP
+  // tls.rejectUnauthorized: false necesario porque Don Web (Ferozo) usa cert *.ferozo.com
+  // pero el hostname del cliente es mail.raven-net.com.ar — no coincide el altname
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT || '465'),
@@ -55,6 +57,9 @@ module.exports = async function handler(req, res) {
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
+    },
+    tls: {
+      rejectUnauthorized: false,
     },
   });
 
