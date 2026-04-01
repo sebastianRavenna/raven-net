@@ -123,21 +123,31 @@
 
 								<!-- Contact Form -->
 									<section>
-										<form method="post" action="#">
+										<form id="contact-form" method="post" action="#">
+											<!-- Honeypot: los bots lo llenan, los humanos no lo ven -->
+											<input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
 											<div class="row gtr-50">
 												<div class="col-6 col-12-small">
 													<input type="text" name="name" id="contact-name" placeholder="Nombre" />
+													<span class="field-error" id="contact-name-error" style="display:none;color:#e05454;font-size:0.85em;"></span>
 												</div>
 												<div class="col-6 col-12-small">
-													<input type="text" name="email" id="contact-email" placeholder="E-mail" />
+													<input type="email" name="email" id="contact-email" placeholder="E-mail" />
+													<span class="field-error" id="contact-email-error" style="display:none;color:#e05454;font-size:0.85em;"></span>
+												</div>
+												<div class="col-12">
+													<input type="tel" name="phone" id="contact-phone" placeholder="Teléfono" />
+													<span class="field-error" id="contact-phone-error" style="display:none;color:#e05454;font-size:0.85em;"></span>
 												</div>
 												<div class="col-12">
 													<textarea name="message" id="contact-message" placeholder="Mensaje" rows="4"></textarea>
+													<span class="field-error" id="contact-message-error" style="display:none;color:#e05454;font-size:0.85em;"></span>
 												</div>
 												<div class="col-12">
+													<div id="form-feedback" style="display:none;margin-bottom:1em;padding:0.75em 1em;border-radius:4px;"></div>
 													<ul class="actions">
-														<li><input type="submit" class="style1" value="Send" /></li>
-														<li><input type="reset" class="style2" value="Reset" /></li>
+														<li><input type="submit" id="contact-submit" class="style1" value="Enviar" /></li>
+														<li><input type="reset" class="style2" value="Limpiar" /></li>
 													</ul>
 												</div>
 												<img id=logoFinal src="./images/Icono_-_copia-removebg-preview.png" alt="">
@@ -206,6 +216,7 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+		<script src="assets/js/contact-form.js"></script>
 
 	</body>
 </html>
