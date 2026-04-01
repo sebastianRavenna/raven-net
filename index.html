@@ -237,7 +237,9 @@
 					<div class="bg-white bg-opacity-10 rounded-4 p-4">
 						<h3 class="h4 mb-4 text-center">Formulario de Contacto</h3>
 						<div id="form-message" class="d-none"></div>
-						<form id="contact-form" method="POST" action="process_form.php" novalidate>
+						<form id="contact-form" method="POST" action="/api/contact" novalidate>
+						<!-- Honeypot: los bots lo llenan, los humanos no lo ven -->
+						<input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
 							<div class="row g-3">
 								<div class="col-md-6">
 									<div class="form-floating">
@@ -337,20 +339,20 @@
 							</div>
 						</div>
 					</div>
-				</div>
 			</div>
-			
-			<!-- Logo Final Centrado -->
-			<div class="text-center mt-5 pt-4 border-top border-secondary">
-				<img src="./images/Icono_-_copia-removebg-preview.png" alt="Logo Raven-Net" class="img-fluid" style="max-width: 150px;" loading="lazy">
-			</div>
+		</div>
+
+		<!-- Logo Final Centrado -->
+		<div class="text-center mt-5 pt-4 border-top border-secondary">
+			<img src="./images/Icono_-_copia-removebg-preview.png" alt="Logo Raven-Net" class="img-fluid" style="max-width: 150px;" loading="lazy">
+		</div>
 		</div>
 	</footer>
 
 	<!-- WhatsApp Float Button -->
-	<a href="https://wa.me/+5491168363610?text=Hola, vi tu página web y me gustaría obtener más información sobre sus servicios" 
-	   class="whatsapp-float position-fixed bottom-0 end-0 m-4 btn btn-success rounded-circle d-flex align-items-center justify-content-center shadow-lg" 
-	   target="_blank" 
+	<a href="https://wa.me/+5491168363610?text=Hola, vi tu página web y me gustaría obtener más información sobre sus servicios"
+	   class="whatsapp-float position-fixed bottom-0 end-0 m-4 btn btn-success rounded-circle d-flex align-items-center justify-content-center shadow-lg"
+	   target="_blank"
 	   rel="noopener noreferrer"
 	   aria-label="Contactar por WhatsApp"
 	   title="Chatea con nosotros por WhatsApp"

@@ -406,29 +406,31 @@
         submitButton.disabled = true;
         submitButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Enviando...';
 
-        // Preparar datos del formulario
-        const formData = new FormData(form);
-        
-        // Log de datos que se envían
-        console.log('📦 Datos del formulario:');
-        for (let [key, value] of formData.entries()) {
-            console.log(`  ${key}: ${value}`);
+        // Preparar datos del formulario como JSON
+        const payload = {
+            name:    (form.querySelector('#contact-name')?.value    || '').trim(),
+            email:   (form.querySelector('#contact-email')?.value   || '').trim(),
+            phone:   (form.querySelector('#contact-phone')?.value   || '').trim(),
+            message: (form.querySelector('#contact-message')?.value || '').trim(),
+        };
+
+        // Honeypot: si está lleno, es un bot — fingir éxito
+        const honeypot = form.querySelector('input[name="website"]');
+        if (honeypot && honeypot.value) {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalText;
+            showMessage('¡Mensaje enviado correctamente! Te contactaremos pronto.', 'success');
+            form.reset();
+            return;
         }
 
-        // Determinar la URL de envío
-        let actionUrl = form.action;
-        if (actionUrl.includes('process_form.php')) {
-            actionUrl = actionUrl.replace('process_form.php', 'process_form.php');
-        } else if (!actionUrl.includes('process_form.php')) {
-            actionUrl = 'process_form.php';
-        }
-        
-        console.log('🎯 Enviando a:', actionUrl);
+        console.log('🎯 Enviando a: /api/contact');
 
-        // Enviar vía fetch
-        fetch(actionUrl, {
+        // Enviar vía fetch como JSON
+        fetch('/api/contact', {
             method: 'POST',
-            body: formData
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         })
         .then(response => {
             console.log('📡 Respuesta recibida:', response.status, response.statusText);
